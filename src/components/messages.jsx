@@ -1,8 +1,16 @@
 import React from 'react'
-
-function Messages() {
+import Message from './message'
+const Messages=()=> {
   return (
-    <div>Messages</div>
+    <div className='messages'>
+      <Message/>
+      <Message/>
+      <Message/>
+      <Message/>
+      <Message/>
+      <Message/>
+      <Message/>
+    </div>
   )
 }
 
