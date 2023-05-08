@@ -54,7 +54,7 @@ uploadTask.on(
       });
 
       await setDoc(doc(db,"userChats",res.user.uid),{});
-      navigate('/home');
+      navigate('/');
     });
   }
 );
