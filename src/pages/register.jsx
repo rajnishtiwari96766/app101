@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom';
 const Register=()=>   {
 const[err,setErr]=useState(false) //it will handle the initial error state
 
-const navigate=useNavigate()
+const navigate=useNavigate();
+
   const handleSubmit=async(e)=>{
     e.preventDefault() //this prevents for the page getting reloaded again and again  
     // console.log(e.target[0].value)
@@ -54,8 +55,8 @@ uploadTask.on(
       });
 
       await setDoc(doc(db,"userChats",res.user.uid),{});
-      navigate('/');
-    });
+      navigate("/")
+    })
   }
 );
 
