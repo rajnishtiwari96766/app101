@@ -1,33 +1,37 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { doc, onSnapshot } from "firebase/firestore";
+
+import { db } from '../firebase'
+import { AuthContext } from '../context/AuthContext';
 
 const Chats=()=> {
     const[chats,setChats]=useState([])
-    useEffect(()=>{
 
-    },[])
+    const{currentUser}=useContext(AuthContext)
+    useEffect(()=>{
+        const getchats=()=>{
+            const unsub = onSnapshot(doc(db, "userChats",currentUser.uid), (doc) => {
+                setChats(doc.data());
+            });        
+            return ()=>{
+                unsub();
+            }
+        }
+        currentUser.uid &&getchats()
+    },[currentUser.uid])
+
+    // console.log(Object.entries(chats))
   return (
     <div className='chats'>
-         <div className='userChat'>
-            <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSly0txX3sRodpDz5r6KSUwalEsKE9uxNJk9Q&usqp=CAU'></img>
+        {Object.entries(chats)?.map((chat)=>( 
+         <div className='userChat' key={chat[0]}>
+            <img src={chat[1].userInfo.photoURL}></img>
             <div className='userChatInfo'>
-                <span>Goluuuu</span>
-                <p>Hello</p>
+                <span>{chat[1].userInfo.displayName}</span>
+                <p>{chat[1].userInfo.lastMessage?.text}</p>
             </div>
-        </div>
-         <div className='userChat'>
-            <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSly0txX3sRodpDz5r6KSUwalEsKE9uxNJk9Q&usqp=CAU'></img>
-            <div className='userChatInfo'>
-                <span>Goluuuu</span>
-                <p>Hello</p>
-            </div>
-        </div>
-         <div className='userChat'>
-            <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSly0txX3sRodpDz5r6KSUwalEsKE9uxNJk9Q&usqp=CAU'></img>
-            <div className='userChatInfo'>
-                <span>Goluuuu</span>
-                <p>Hello</p>
-            </div>
-        </div>
+        </div> 
+        ))}
     </div>
   )
 }
