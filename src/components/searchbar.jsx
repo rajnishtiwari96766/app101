@@ -61,14 +61,16 @@ const Searchbar = () => {
           [combinedId+".date"]:serverTimestamp()
         })
       }
-    }catch(err){
-
-    }
+    }catch(err){}
+    setUser(null)
+    setUserName("")
   }
   return (
     <div className='search'>
       <div className='searchForm'>
-        <input type='text' placeholder='find the user' onKeyDown={handleKey} onChange={e => setUserName(e.target.value)} />
+        <input type='text' placeholder='find the user' onKeyDown={handleKey} onChange={e => setUserName(e.target.value)}
+        value={username}
+         />
         {/* onkeydown handles the keyboard actions and when we preess enter button
             it searches the user */}
       </div>
