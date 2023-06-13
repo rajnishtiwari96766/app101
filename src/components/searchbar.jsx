@@ -72,7 +72,7 @@ const Searchbar = () => {
         <input type='text' placeholder='find the user' onKeyDown={handleKey} onChange={e => setUserName(e.target.value)}
         value={username}
          />
-        {/* onkeydown handles the keyboard actions and when we preess enter button
+        {/* onkeydown handles the keyboard actions and when we press enter button
             it searches the user */}
       </div>
 

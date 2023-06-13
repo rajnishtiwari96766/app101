@@ -8,6 +8,7 @@ const Chat=()=> {
   return (
     <div className='chat'>
       <div className="chatInfo">
+      {/* {data.user?.displayName} */}
         <span>{data.user?.displayName}</span>
         <div className="chatIcons">
           <span><i class="fa-solid fa-video fa-lg"></i></span>

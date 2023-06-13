@@ -19,7 +19,7 @@ const Chats=()=> {
                 unsub();
             }
         }
-        currentUser.uid &&getchats()
+        currentUser.uid && getchats();
     },[currentUser.uid])
 
 
