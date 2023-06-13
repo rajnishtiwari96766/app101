@@ -1,41 +1,37 @@
 import { onAuthStateChanged } from "firebase/auth";
 import {auth} from "../firebase"
-import { createContext, useEffect ,useState} from "react";
+import { createContext, useContext, useEffect ,useReducer,useState} from "react";
+import { AuthContext } from "./AuthContext";
 
 export const ChatContext=createContext()
 
 export const ChatContextProvider=({children})=>{
+    const {currentUser}=useContext(AuthContext)
     const Initial_state={
         chatId:"null",
         user:{},
     }
 
+    //reducer will be used to perform some or the other actions
     const chatReducer=(state,action)=>{
         switch(action.type){
             case "Change_user":
-                return{};
+                return{
+                    use:action.payload,
+                    chatId: currentUser.uid>action.payload.uid ?
+                     currentUser.uid+action.payload.uid 
+                     : action.payload.uid+currentUser.uid,
+                };
 
                 default:
                     return state;
         }
     }
-    const[currentUser,setCurrentUser]=useState({})
+    const[state,dispatch]=useReducer(chatReducer,Initial_state);
 
-    //here in useeffect we are gonna check whether we have a user or not using firebase
-    useEffect(()=>{
-      const unsub=onAuthStateChanged(auth,(user)=>{
-            setCurrentUser(user);
-            console.log(user)
-        })
-
-        //this is a cleanup function that avoids the memory leakage 
-        return ()=>{
-            unsub();
-        }
-    },[]);
 return(  
     //this is basically used for routing all the children with the currentUser
-    <ChatContext.Provider value={{currentUser}}>
+    <ChatContext.Provider value={{data:state,dispatch }}>
         {children}
     </ChatContext.Provider>
 )

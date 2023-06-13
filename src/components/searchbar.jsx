@@ -31,10 +31,11 @@ const Searchbar = () => {
     e.code === "Enter" && handleSearch();
   }
 
-  const handleSelect=async()=>{
+  const handleSelect=async(u)=>{
     const combinedId= currentUser.uid>user.uid ? currentUser.uid+user.uid : user.uid+currentUser.uid;
-    console.log(combinedId)
-    console.log(currentUser.uid)
+    // dispatch({type:"Change_user",payload:u})
+    // console.log(combinedId)
+    // console.log(currentUser.uid)
     try{
       const res=await getDoc(doc(db,"chats",combinedId))
 
