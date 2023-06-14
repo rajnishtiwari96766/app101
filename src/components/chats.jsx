@@ -31,10 +31,11 @@ const Chats=()=> {
     <div className='chats'>
         {Object.entries(chats)?.map((chat)=>( 
          <div className='userChat' key={chat[0]} onClick={()=>handleSelect(chat[1].userInfo)}>
-            <img src={chat[1].userInfo.photoURL}></img>
+            <img src={chat[1].userInfo.photoURL}/>
             <div className='userChatInfo'>
+                {/* console.log(photoURL); */}
                 <span>{chat[1].userInfo.displayName}</span>
-                <p>{chat[1].userInfo.lastMessage?.text}</p>
+                <p>{chat[1].lastMessage?.text}</p>
             </div>
         </div> 
         ))}

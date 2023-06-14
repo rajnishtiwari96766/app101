@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { ChatContext } from '../context/ChatContext'
-import { Timestamp, arrayUnion, updateDoc } from 'firebase/firestore';
+import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { v4 as uuid } from "uuid";
 import { db, storage } from '../firebase';
-import { getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 const Inputs = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
@@ -14,7 +14,7 @@ const Inputs = () => {
 
   const handleSend = async () => {
     if (img) {
-      const storageRef = ref(storage, uuid);
+      const storageRef = ref(storage, uuid());
 
       const uploadTask = uploadBytesResumable(storageRef, img);
       uploadTask.on(
@@ -26,30 +26,42 @@ const Inputs = () => {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
           getDownloadURL (uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await updateProfile(res.user, {
-              displayName,
-              photoURL: downloadURL,
+            await updateDoc(doc(db, "chats", data.chatId), {
+              messages: arrayUnion({
+                id: uuid(),
+                text,
+                senderId: currentUser.uid,
+                date: Timestamp.now(),
+                img:downloadURL
+              }),
             })
-            await setDoc(doc(db, "users", res.user.uid), {
-              uid: res.user.uid,
-              displayName,
-              email,
-              photoURL: downloadURL,
-            })
-            await setDoc(doc(db, "userChats", res.user.uid), {});
-            navigate("/")
           });
         })
     } else {
-      await updateDoc(doc(db, "chats", data.chatId)), {
+      await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
-          id: uuid,
+          id: uuid(),
           text,
           senderId: currentUser.uid,
           date: Timestamp.now(),
         }),
-      }
+      })
     }
+    await updateDoc(doc(db,"userChats",currentUser.uid),{
+      [data.childId +".lastMessage"]:{
+        text, //this will update the latest text
+      },
+      [data.childId+".date"]:serverTimestamp()
+    })
+    await updateDoc(doc(db,"userChats",data.user.uid),{
+      [data.childId +".lastMessage"]:{
+        text, //this will update the latest text
+      },
+      [data.childId+".date"]:serverTimestamp()
+    })
+    
+    setText("")
+    setImg(null)
   }
   return (
     <div className='input'>
