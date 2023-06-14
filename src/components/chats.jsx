@@ -26,14 +26,13 @@ const Chats=()=> {
     const handleSelect=(u)=>{
         dispatch({type:"Change_user",payload: u})
     }
-    // console.log(Object.entries(chats))
   return (
     <div className='chats'>
         {Object.entries(chats)?.map((chat)=>( 
          <div className='userChat' key={chat[0]} onClick={()=>handleSelect(chat[1].userInfo)}>
-            <img src={chat[1].userInfo.photoURL}/>
+            <img src={chat[1].userInfo.photoURL} alt=" "/>
+            {/* console.log(chat[1].userInfo) */}
             <div className='userChatInfo'>
-                {/* console.log(photoURL); */}
                 <span>{chat[1].userInfo.displayName}</span>
                 <p>{chat[1].lastMessage?.text}</p>
             </div>

@@ -59,7 +59,6 @@ const Inputs = () => {
       },
       [data.childId+".date"]:serverTimestamp()
     })
-    
     setText("")
     setImg(null)
   }

@@ -9,7 +9,7 @@ const Message=({message})=> {
 
   return (
     <div className='message owner'>
-       */}
+     
     </div>
   )
 }
