@@ -32,7 +32,7 @@ const Inputs = () => {
                 text,
                 senderId: currentUser.uid,
                 date: Timestamp.now(),
-                img:downloadURL
+                img:downloadURL,
               }),
             })
           });
@@ -48,23 +48,23 @@ const Inputs = () => {
       })
     }
     await updateDoc(doc(db,"userChats",currentUser.uid),{
-      [data.childId +".lastMessage"]:{
+      [data.chatId +".lastMessage"]:{
         text, //this will update the latest text
       },
-      [data.childId+".date"]:serverTimestamp()
+      [data.chatId+".date"]:serverTimestamp()
     })
     await updateDoc(doc(db,"userChats",data.user.uid),{
-      [data.childId +".lastMessage"]:{
+      [data.chatId +".lastMessage"]:{
         text, //this will update the latest text
       },
-      [data.childId+".date"]:serverTimestamp()
+      [data.chatId+".date"]:serverTimestamp()
     })
     setText("")
     setImg(null)
   }
   return (
     <div className='input'>
-      <input type='text' placeholder='Type something...' onChange={e => setText(e.target.value)} />
+      <input type='text' placeholder='Type something...' onChange={e => setText(e.target.value)} value={text} />
       <div className="send">
         <span><i class="fa-solid fa-paperclip fa-xl"></i></span>
         <input type="file" style={{ display: 'none' }} id='file' onChange={e => setImg(e.target.files[0])} />
